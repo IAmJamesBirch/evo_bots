@@ -4,6 +4,7 @@ import pyrosim.pyrosim as pyrosim
 import pybullet as p
 import time
 import pybullet_data
+from pyrosim.neuralNetwork import NEURAL_NETWORK
 import constants as c
 from sensor import SENSOR
 from motor import MOTOR
@@ -14,10 +15,7 @@ class ROBOT:
 		pyrosim.Prepare_To_Simulate(self.robotId)
 		self.Prepare_To_Sense()
 		self.Prepare_To_Act() 
-		#self.targetAnglesFront = c.AmplitudeFront *  numpy.sin(c.FrequencyFront*(c.PhaseOffsetFront +  numpy.linspace(c.Theta_Min,c.Theta_Max,c.Sim_Steps)))
-		#self.targetAnglesBack  = c.AmplitudeBack *  numpy.sin(c.FrequencyBack*(c.PhaseOffsetBack +  numpy.linspace(c.Theta_Min,c.Theta_Max,c.Sim_Steps))) 
-		#numpy.save("/Users/jamesbirch/cs3060/data/targetAnglesFront.npy",self.targetAnglesFront)
-		#numpy.save("/Users/jamesbirch/cs3060/data/targetAnglesBack.npy",self.targetAnglesBack)
+		self.nn = NEURAL_NETWORK("brain.nndf")
 	
 	def Prepare_To_Sense(self):
 		self.sensors = {}
@@ -34,5 +32,15 @@ class ROBOT:
 			self.motors[jointName] = MOTOR(jointName)
 	
 	def Act(self,t):
-		for key in self.motors:
-			self.motors[key].Set_Value(self.robotId,t)
+		for neuronName in self.nn.Get_Neuron_Names():
+			if self.nn.Is_Motor_Neuron(neuronName):
+				jointName = self.nn.Get_Motor_Neurons_Joint(neuronName).encode("utf-8")
+				desiredAngle = self.nn.Get_Value_Of(neuronName)
+				self.motors[jointName].Set_Value(self.robotId,desiredAngle)
+#				print(neuronName,jointName,desiredAngle)
+#		for key in self.motors:
+#			self.motors[key].Set_Value(self.robotId,t)
+	
+	def Think(self):
+		self.nn.Update()
+		self.nn.Print()
