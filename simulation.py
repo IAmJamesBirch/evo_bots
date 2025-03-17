@@ -23,7 +23,7 @@ class SIMULATION:
 			ROBOT.Sense(self.robot,i)
 			ROBOT.Think(self.robot)
 			ROBOT.Act(self.robot,i)
-			time.sleep(c.Step_Pause)
+		#	time.sleep(c.Step_Pause)
 		#	print(i)
 
 	def __del__(self):
