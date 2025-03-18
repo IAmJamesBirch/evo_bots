@@ -1,3 +1,4 @@
+
 import random
 import numpy
 import pyrosim.pyrosim as pyrosim
@@ -23,3 +24,5 @@ Theta_Max= 2*numpy.pi
 #motor
 Max_Force = 50
 
+#evolution
+numberOfGenerations = 10

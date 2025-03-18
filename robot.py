@@ -1,3 +1,4 @@
+
 import random
 import numpy
 import pyrosim.pyrosim as pyrosim
@@ -37,10 +38,21 @@ class ROBOT:
 				jointName = self.nn.Get_Motor_Neurons_Joint(neuronName).encode("utf-8")
 				desiredAngle = self.nn.Get_Value_Of(neuronName)
 				self.motors[jointName].Set_Value(self.robotId,desiredAngle)
-#				print(neuronName,jointName,desiredAngle)
+#				#print(neuronName,jointName,desiredAngle)
 #		for key in self.motors:
 #			self.motors[key].Set_Value(self.robotId,t)
 	
 	def Think(self):
 		self.nn.Update()
-		self.nn.Print()
+		#self.nn.Print()
+
+	def Get_Fitness(self):
+		stateOfLinkZero = p.getLinkState(self.robotId,0)
+		positionOfLinkZero = stateOfLinkZero[0]
+		xCoordinateOfLinkZero = positionOfLinkZero[0]
+		#print(xCoordinateOfLinkZero)
+		file = open("fitness.txt","w")
+		file.write(str(xCoordinateOfLinkZero))
+		file.close()
+		exit()
+		

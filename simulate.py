@@ -1,3 +1,4 @@
+import sys
 import random
 import numpy
 import pyrosim.pyrosim as pyrosim
@@ -7,7 +8,8 @@ import pybullet_data
 import constants as c
 from simulation import SIMULATION
 
-simulation = SIMULATION()
-SIMULATION.Run(simulation)
-
+directOrGUI = sys.argv[1]
+simulation = SIMULATION(directOrGUI)
+simulation.Run()
+simulation.Get_Fitness()
 
