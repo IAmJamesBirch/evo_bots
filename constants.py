@@ -26,3 +26,4 @@ Max_Force = 50
 
 #evolution
 numberOfGenerations = 10
+populationSize = 10

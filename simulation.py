@@ -9,23 +9,27 @@ from world import WORLD
 from robot import ROBOT
 
 class SIMULATION:
-	def __init__(self,directOrGUI):
+	def __init__(self,directOrGUI,solutionID):
+		self.directOrGUI = directOrGUI
+		self.solutionID = solutionID
 		if(directOrGUI == "DIRECT"):
 			self.physicsClient = p.connect(p.DIRECT)
 		else:
 			self.physicsClient = p.connect(p.GUI)
+
 		p.setAdditionalSearchPath(pybullet_data.getDataPath())
 		p.setGravity(0,0,c.Gravity,self.physicsClient)
 		self.world = WORLD()
-		self.robot = ROBOT()
+		self.robot = ROBOT(self.solutionID)
 
 	def Run(self):
 		for i in range(0,c.Sim_Steps):
 			p.stepSimulation()
-			ROBOT.Sense(self.robot,i)
-			ROBOT.Think(self.robot)
-			ROBOT.Act(self.robot,i)
-		#	time.sleep(c.Step_Pause)
+			self.robot.Sense(i)
+			self.robot.Think()
+			self.robot.Act(i)
+			if(self.directOrGUI == "GUI"):
+				time.sleep(c.Step_Pause)
 		#	print(i)
 
 	def __del__(self):
