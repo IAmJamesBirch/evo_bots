@@ -23,7 +23,13 @@ Theta_Max= 2*numpy.pi
 
 #motor
 Max_Force = 50
+motorJointRange = 0.2
 
 #evolution
 numberOfGenerations = 10
 populationSize = 10
+
+#neural net
+numSensorNeurons = 4
+numHiddenNeurons = 4
+numMotorNeurons = 8
