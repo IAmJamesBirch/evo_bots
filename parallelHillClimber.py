@@ -1,5 +1,6 @@
 from solution import SOLUTION
 import constants as c
+import numpy
 import copy
 import os
 
@@ -8,6 +9,8 @@ class PARALLEL_HILL_CLIMBER:
 	def __init__(self):
 		os.system("rm brain*.nndf")
 		os.system("rm fitness*.txt")
+		self.data = numpy.zeros((c.populationSize,c.numberOfGenerations))
+		self.currGen = 0
 		self.nextAvailableID = 0
 		self.parents = {}
 		for x in range(0,c.populationSize):
@@ -18,6 +21,7 @@ class PARALLEL_HILL_CLIMBER:
 		self.Evaluate(self.parents)
 		for currentGeneration in range(0,c.numberOfGenerations):
 			self.Evolve_For_One_Generation()
+			self.currGen += 1
 
 	def Evolve_For_One_Generation(self):
 		self.Spawn()
@@ -43,6 +47,7 @@ class PARALLEL_HILL_CLIMBER:
 		
 		for x in solutions:
 			solutions[x].Wait_For_Simulation_To_End()
+		
 
 	def Select(self):
 		for x in self.parents:
@@ -54,8 +59,9 @@ class PARALLEL_HILL_CLIMBER:
 		print()
 		for x in self.parents:
 			print()
-			print(f"Parent Fitness: {self.parents[x].fitness}, Child Fitness: {self.children[x].fitness}")
+			print(f"Generation {self.currGen} Parent Fitness: {self.parents[x].fitness}, Child Fitness: {self.children[x].fitness}")
 			print()
+			self.data[x][self.currGen]=self.parents[x].fitness
 		print()
 		
 	def Show_Best(self):
